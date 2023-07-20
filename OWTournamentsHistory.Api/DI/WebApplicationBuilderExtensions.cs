@@ -6,17 +6,14 @@ namespace OWTournamentsHistory.Api.DI
     {
         public static void AddConfigurations(this WebApplicationBuilder builder)
         {
-            builder.Services.Configure<OWTournamentsHistoryDatabaseSettings>(
-                builder.Configuration.GetRequiredSection(nameof(OWTournamentsHistoryDatabaseSettings)));
-
-            builder.Services.Configure<DropboxApiSettings>(
-                builder.Configuration.GetRequiredSection(nameof(DropboxApiSettings)));
-
-            builder.Services.Configure<TwitchApiSettings>(
-                builder.Configuration.GetRequiredSection(nameof(TwitchApiSettings)));
-
-            builder.Services.Configure<ApplicationAuthenticationSettings>(
-                builder.Configuration.GetRequiredSection(nameof(ApplicationAuthenticationSettings)));
+            builder.RegisterConfiguration<OWTournamentsHistoryDatabaseSettings>();
+            builder.RegisterConfiguration<DropboxApiSettings>();
+            builder.RegisterConfiguration<TwitchApiSettings>();
+            builder.RegisterConfiguration<ApplicationAuthenticationSettings>();
         }
+
+        public static void RegisterConfiguration<T>(this WebApplicationBuilder builder, string? configSectionName = default)
+            where T : class =>
+            builder.Services.Configure<T>(builder.Configuration.GetRequiredSection(configSectionName ?? nameof(T)));
     }
 }

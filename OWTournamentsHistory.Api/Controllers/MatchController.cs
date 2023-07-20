@@ -36,7 +36,6 @@ namespace OWTournamentsHistory.Api.Controllers
 
         [HttpGet]
         [Route("{id}")]
-        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -47,6 +46,7 @@ namespace OWTournamentsHistory.Api.Controllers
 
         [HttpPut]
         [Route("add")]
+        [Authorize("AdminScope")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> Add([FromBody] Match match, CancellationToken cancellationToken)
@@ -57,6 +57,7 @@ namespace OWTournamentsHistory.Api.Controllers
 
         [HttpDelete]
         [Route("delete/{id}")]
+        [Authorize("AdminScope")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -67,6 +68,7 @@ namespace OWTournamentsHistory.Api.Controllers
 
         [HttpPut]
         [Route("import")]
+        [Authorize("AdminScope")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult> ImportFromHtml(CancellationToken cancellationToken)

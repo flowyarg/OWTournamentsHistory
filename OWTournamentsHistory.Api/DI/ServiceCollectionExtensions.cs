@@ -54,6 +54,18 @@ namespace OWTournamentsHistory.Api.DI
                 });
         }
 
+        public static void AddCustomAuthorization(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminScope", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", "admin-api");
+                });
+            });
+        }
+
         public static void AddAutoMapper(this IServiceCollection services)
         {
             var mapperConfig = new MapperConfiguration(mc =>

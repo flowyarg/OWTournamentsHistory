@@ -2,8 +2,6 @@ using Coravel;
 using Microsoft.IdentityModel.Logging;
 using OWTournamentsHistory.Api;
 using OWTournamentsHistory.Api.DI;
-using OWTournamentsHistory.Api.GrpcServices;
-using OWTournamentsHistory.Api.Services;
 using OWTournamentsHistory.DataAccess.DI;
 using OWTournamentsHistory.Tasks.DI;
 using System.Diagnostics;
@@ -22,6 +20,7 @@ builder.Services.AddGrpc(x => x.EnableDetailedErrors = true);
 builder.AddConfigurations();
 
 builder.Services.AddCustomAuthentication(builder.Configuration);
+builder.Services.AddCustomAuthorization(builder.Configuration);
 builder.Services.AddDatabaseService(builder.Configuration);
 
 builder.Services.AddScheduler();
@@ -39,8 +38,6 @@ builder.Services.AddAutoMapper();
 var app = builder.Build();
 
 app.Services.UseScheduler(SchedulerProfile.SchedulerTasks);
-
-app.AddGrpcServices();
 
 app.Services.ConfigureQueue()
     .OnError(e =>
@@ -60,6 +57,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.AddGrpcServices();
 
 app.MapControllers();
 

@@ -2,7 +2,6 @@
 using MongoDB.Driver;
 using OWTournamentsHistory.DataAccess.Contract;
 using OWTournamentsHistory.DataAccess.Model;
-using SharpCompress.Common;
 
 namespace OWTournamentsHistory.DataAccess.Implementation.Base
 {
@@ -39,7 +38,7 @@ namespace OWTournamentsHistory.DataAccess.Implementation.Base
 
         public async virtual Task UpdateRangeAsync(IReadOnlyCollection<T> entries, CancellationToken cancellationToken = default)
         {
-            using (var session = await _mongoClient.StartSessionAsync())
+            using (var session = await _mongoClient.StartSessionAsync(cancellationToken: cancellationToken))
             {
                 var result = await session.WithTransactionAsync(async (s, ct) =>
                 {
@@ -61,7 +60,7 @@ namespace OWTournamentsHistory.DataAccess.Implementation.Base
 
         public virtual async Task Clear(CancellationToken cancellationToken = default)
         {
-            await _entries.DeleteManyAsync(_ => true, cancellationToken);
+            await _entries.DeleteManyAsync(_allPredicate, cancellationToken);
         }
        
         protected virtual void GenerateExternalId(T entry)

@@ -120,7 +120,7 @@ namespace OWTournamentsHistory.Api.MappingProfiles.Helpers
         }
 
         public static PlayerStatisticsResponse.Types.CombinationsData.Types.NameCount ToGrpcModel(this ApiModel.PlayerStatistics.NameCount value) =>
-            new PlayerStatisticsResponse.Types.CombinationsData.Types.NameCount
+            new()
             {
                 Name = value.Name,
                 Count = value.Count

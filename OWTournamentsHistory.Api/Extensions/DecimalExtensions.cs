@@ -1,8 +1,8 @@
 ﻿namespace OWTournamentsHistory.Api.Proto
 {
-    public partial class DecimalValue
+    public sealed partial class DecimalValue
     {
-        private const decimal NanoFactor = 1_000_000_000;
+        private const decimal _nanoFactor = 1_000_000_000;
         public DecimalValue(long units, int nanos)
         {
             Units = units;
@@ -10,12 +10,12 @@
         }
 
         public static implicit operator decimal(DecimalValue grpcDecimal)
-            => grpcDecimal.Units + grpcDecimal.Nanos / NanoFactor;
+            => grpcDecimal.Units + grpcDecimal.Nanos / _nanoFactor;
 
         public static implicit operator DecimalValue(decimal value)
         {
             var units = decimal.ToInt64(value);
-            var nanos = decimal.ToInt32((value - units) * NanoFactor);
+            var nanos = decimal.ToInt32((value - units) * _nanoFactor);
             return new DecimalValue(units, nanos);
         }
     }
