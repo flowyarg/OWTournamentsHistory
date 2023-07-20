@@ -10,7 +10,6 @@ namespace OWTournamentsHistory.Api.Services
 {
     public class TeamsService : ControllerServiceBase<Team, DA.Team>
     {
-        private readonly IMapper _mapper;
         private readonly IPlayerRepository _playerRepository;
 
         public TeamsService(IMapper mapper, ITeamRepository teamRepository, IPlayerRepository playerRepository) : base(mapper, teamRepository)

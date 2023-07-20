@@ -5,7 +5,6 @@ option csharp_namespace = "OWTournamentsHistory.Api.Proto";
 package players;
 
 import "google/protobuf/wrappers.proto";
-import "common.proto";
 
 service PlayersHandler {
     rpc GetMany(PlayersGetManyRequest) returns (PlayersGetManyResponse);
