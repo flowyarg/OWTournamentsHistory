@@ -15,10 +15,12 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddGrpc(x => x.EnableDetailedErrors = true);
 
 builder.AddConfigurations();
 
 builder.Services.AddCustomAuthentication(builder.Configuration);
+builder.Services.AddCustomAuthorization(builder.Configuration);
 builder.Services.AddDatabaseService(builder.Configuration);
 
 builder.Services.AddScheduler();
@@ -55,6 +57,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.AddGrpcServices();
 
 app.MapControllers();
 

@@ -10,7 +10,7 @@ namespace OWTournamentsHistory.DataAccess.Implementation
 {
     internal class GeneralTournamentStatsRepository : ReadOnlyRepository<GeneralTournamentStats>, IGeneralTournamentStatsRepository
     {
-        private const int STATS_ID = 1;
+        private const int _statsId = 1;
         public GeneralTournamentStatsRepository(IMongoClient mongoClient, IMongoDatabase mongoDatabase, IOptions<OWTournamentsHistoryDatabaseSettings> databaseSettings) 
             : base(mongoClient, mongoDatabase, databaseSettings.Value.GeneralTournamentStatsCollectionName)
         {}
@@ -28,13 +28,13 @@ namespace OWTournamentsHistory.DataAccess.Implementation
             bool ignoreCase = true,
             CancellationToken cancellationToken = default) => throw new NotImplementedException();
         public async Task<GeneralTournamentStats> GetStats(CancellationToken cancellationToken = default) =>
-            await _entries.Find(CreateFilterByIdDefinition(STATS_ID))
+            await _entries.Find(CreateFilterByIdDefinition(_statsId))
             .SingleAsync(cancellationToken);
 
         public async Task UpdateStats(GeneralTournamentStats stats, CancellationToken cancellationToken = default)
         {
-            stats.ExternalId = STATS_ID;
-            await _entries.DeleteOneAsync(CreateFilterByIdDefinition(STATS_ID));
+            stats.ExternalId = _statsId;
+            await _entries.DeleteOneAsync(CreateFilterByIdDefinition(_statsId), cancellationToken);
             await _entries.InsertOneAsync(stats, new(), cancellationToken);
         }
     }

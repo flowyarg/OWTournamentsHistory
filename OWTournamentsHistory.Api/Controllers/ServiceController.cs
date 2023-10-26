@@ -11,6 +11,8 @@ namespace OWTournamentsHistory.Api.Controllers
     [Produces("application/json")]
 #if DEBUG
     [AllowAnonymous]
+#else
+    [Authorize("AdminScope")]
 #endif
     public class ServiceController : Controller
     {

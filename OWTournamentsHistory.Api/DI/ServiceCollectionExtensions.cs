@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using OWTournamentsHistory.Api.GrpcServices;
 using OWTournamentsHistory.Api.MappingProfiles;
+using OWTournamentsHistory.Api.MappingProfiles.Grpc;
+using OWTournamentsHistory.Api.Services;
 using OWTournamentsHistory.Common.Settings;
 
 namespace OWTournamentsHistory.Api.DI
@@ -8,7 +11,18 @@ namespace OWTournamentsHistory.Api.DI
     {
         public static void AddServices(this IServiceCollection serviceCollection)
         {
+            serviceCollection.AddScoped<StatisticsService>();
+            serviceCollection.AddScoped<TeamsService>();
+            serviceCollection.AddScoped<MatchesService>();
+            serviceCollection.AddScoped<PlayersService>();
+        }
 
+        public static void AddGrpcServices(this WebApplication? app)
+        {
+            app!.MapGrpcService<StatisticsHandlerService>();
+            app!.MapGrpcService<TeamsHandlerService>();
+            app!.MapGrpcService<MatchesHandlerService>();
+            app!.MapGrpcService<PlayersHandlerService>();
         }
 
         public static void AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
@@ -40,6 +54,18 @@ namespace OWTournamentsHistory.Api.DI
                 });
         }
 
+        public static void AddCustomAuthorization(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("AdminScope", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", "admin-api");
+                });
+            });
+        }
+
         public static void AddAutoMapper(this IServiceCollection services)
         {
             var mapperConfig = new MapperConfiguration(mc =>
@@ -47,6 +73,10 @@ namespace OWTournamentsHistory.Api.DI
                 mc.AddProfile(new PlayerMappingProfile());
                 mc.AddProfile(new TeamMappingProfile());
                 mc.AddProfile(new MatchMappingProfile());
+                mc.AddProfile(new StatisticsMappingProfile());
+                mc.AddProfile(new TeamsMappingProfile());
+                mc.AddProfile(new MatchesMappingProfile());
+                mc.AddProfile(new PlayersMappingProfile());
             });
 
             services.AddSingleton(mapperConfig.CreateMapper());
